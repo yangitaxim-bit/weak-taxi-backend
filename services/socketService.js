@@ -2,18 +2,20 @@ const { Server } = require('socket.io');
 const jwt = require('jsonwebtoken');
 
 let io;
+const JWT_SECRET = process.env.JWT_SECRET || "supersecretweakkey123";
 
 const initSocket = (server) => {
     io = new Server(server, {
         cors: { origin: "*" }
     });
 
+    // Authentication for Socket.io
     io.use((socket, next) => {
         const token = socket.handshake.auth.token;
         if (!token) return next(new Error("Authentication error"));
 
         try {
-            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            const decoded = jwt.verify(token, JWT_SECRET);
             socket.user = decoded;
             next();
         } catch (err) {

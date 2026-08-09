@@ -1,9 +1,12 @@
 const admin = require('firebase-admin');
 require('dotenv').config();
 
+// Hardcoded fallback for Railway/Production
+const databaseURL = process.env.FIREBASE_DATABASE_URL || "https://ygrweaktaxi-default-rtdb.firebaseio.com";
+
 if (!admin.apps.length) {
     admin.initializeApp({
-        databaseURL: process.env.FIREBASE_DATABASE_URL
+        databaseURL: databaseURL
     });
 }
 
